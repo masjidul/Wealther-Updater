@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input id="cityN" type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <div class="input-group-append">
+                    <button id="btn-srch" type="button" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="weather-status text-white text-center">
+            <img id="icon" src="https://openweathermap.org/img/wn/02d@2x.png" alt="">
+            <h1 id="cityLoc">Dhaka</h1>
+            <h3 id="deg"><span>38.06</span>&deg;C</h3>
+            <h1 id="condition" class="lead">Clouds</h1>
+        </div>
+    </div>
+    <script>
+        const baseAdd = "https://api.openweathermap.org/data/2.5/weather";
+        const key = "dffbfe265fd5b3d2c250720ce348da34";
+
+        const getWeatherData = city => {
+            const url = `${baseAdd}?q=${city}&units=metric&appid=${key}`;
+            fetch(url)
+            .then(response => response.json())
+            .then(data => weatherDisplay(data))
+        }
+
+
+        const cityName = document.getElementById('btn-srch');
+        cityName.addEventListener('click', () => {
+            const cityname = document.getElementById('cityN').value;
+            getWeatherData(cityname);
+        })
+
+        const weatherDisplay = data => {
+            document.getElementById('cityLoc').innerText = data.name || "Unkown Location";
+            document.getElementById('deg').innerText = data.main.temp;
+            document.getElementById('conditions').innerText = data.weather[0].main;
+            document.getElementById('icon').setAttribute('src', `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`);
+            document.getElementById('cityN').value = ""
+        }
+        getWeatherData("Dhaka");
+
+        //changing screen wallpaper according to weather
+        // function callWeather(){
+        //     fetch('?q=London,uk&appid=524901&appid=')
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         const weathers = data.weather[0];
+        //         const value = weathers.value;
+        //         const api = `${value.temp} `
+        //         document.getElementById('deg').innerHTML = api;
+
+        //     })
+        // }
+        // callWeather();
+    </script>
+</body>
+
+</html>
